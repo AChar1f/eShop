@@ -2,7 +2,7 @@ import express from "express";
 import path from "path";
 import { connection as db } from "./config/index.js" // comes from config index variables
 import { reverse } from "dns";
-import {hash } from 'bcrypt'
+import {hash, compare } from 'bcrypt'
 import { createToken } from "./middleware/AuthenticateUser.js";
 import bodyParser from "body-parser";
 
@@ -127,7 +127,78 @@ router.patch('/user/:id', async (req, res) => {
       msg: e.message
     })
   }
-
+})
+router.delete('/user/:id', (req, res) => {
+  try {
+    const strQry = `
+    delete from Users 
+    where userID = ${req.params.id}
+    `
+    db.query(strQry, (err) => {
+      if(err) throw new Error(' Ran into an issue while trying to  Delete User, please review the delete query.')
+        res.json({
+          status: res.statusCode,
+          msg: 'Successfully deleted user\'s information.'
+        })
+    })
+  } catch (e) {
+    res.json({
+      status: 404,
+      msg: e.message
+    })
+  }
+})
+router.post('/login', (req, res) => {
+try {
+  const {emailAdd, pwd} = req.body
+  // specify the '' to indicate its a varchar
+  const strQry = `
+  select userID, firstName, lastName, age, emailAdd, pwd
+  from Users
+  where emailAdd = '${emailAdd}'                  
+  `
+  db.query(strQry, async (err, result) => {
+    //'Ran into issue when logging in, please review login query'
+    if(err) throw new Error(err)
+    if(!result?.length) {
+      res.json(
+        {
+          status: 401,
+          msg: 'Invalid email. Please provide a valid email or register.'
+        }
+      )
+    } else {
+      const isValidPass = await compare 
+      (pwd, result[0].pwd)
+      if (isValidPass) {
+        const token = createToken({
+          emailAdd, pwd
+        })
+        res.json({
+          status: res.statusCode,
+          token,
+          result: result[0]
+        })
+      } else {
+        res.json({
+          status: 401,
+          msg: 'Invalid Password. Please input correct password or register.'
+        })
+      }
+    }
+  })
+} catch (e) {
+  res.json({
+    status: 404,
+    msg: e.message
+  })
+}
+})
+router.get('*', (req, res) => {       // any endpoint that we did not create will return this.
+  res.json({
+    status: 404,
+    msg: 'Resource not found'
+  })
 })
 app.listen(port, () => {
   console.log(`Ayo, We live on Port ${port}`)
