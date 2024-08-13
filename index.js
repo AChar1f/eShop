@@ -62,12 +62,6 @@ router.get('/user/:userID', (req, res) => {
     })
   }
 })
-router.get('*', (req, res) => {       // any endpoint that we did not create will return this.
-  res.json({
-    status: 404,
-    msg: 'Resource not found'
-  })
-})
 router.post('/register', async (req, res) => {
   try {
     let data = req.body
