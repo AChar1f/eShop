@@ -127,7 +127,7 @@ class Users {
           }
     }
 
-    userLogin(req, res) {
+    login(req, res) {
         try {
             const {emailAdd, pwd} = req.body
             // specify the '' to indicate its a varchar
