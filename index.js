@@ -1,8 +1,7 @@
 import express from "express";
 import path from "path";
-import { connection as db } from "./config/index.js" // comes from config index variables
-import { reverse } from "dns";
-import {hash, compare } from 'bcrypt'
+import { connection as db } from "./config/index.js" // comes from config index variables    
+import { hash, compare } from 'bcrypt'
 import { createToken } from "./middleware/AuthenticateUser.js";
 import bodyParser from "body-parser";
 
@@ -26,7 +25,7 @@ router.get("^/$|/eShop", (req, res) => {
 router.get("/users", (req, res) => {
   try {
     const strQry = `
-        select firstName, lastName, age, emailAdd
+        select firstName, lastName, age, emailAdd, userRole, profileURL
         from Users;
         `
     db.query(strQry, (err, results) => {
@@ -46,7 +45,7 @@ router.get("/users", (req, res) => {
 router.get('/user/:userID', (req, res) => {
   try{
     const strQry = `
-    select userID, firstName, lastName, age, emailAdd
+    select userID, firstName, lastName, age, emailAdd, userRole, profileURL
     from Users where userID = ${req.params.userID};
     `
     db.query(strQry, (err, result) => {
@@ -69,7 +68,7 @@ router.get('*', (req, res) => {       // any endpoint that we did not create wil
     msg: 'Resource not found'
   })
 })
-router.post('/register', bodyParser.json(),  async (req, res) => {
+router.post('/register', async (req, res) => {
   try {
     let data = req.body
       data.pwd = await hash(data.pwd, 12)
@@ -153,7 +152,7 @@ try {
   const {emailAdd, pwd} = req.body
   // specify the '' to indicate its a varchar
   const strQry = `
-  select userID, firstName, lastName, age, emailAdd, pwd
+  select userID, firstName, lastName, age, emailAdd, pwd, userRole, profileURL
   from Users
   where emailAdd = '${emailAdd}'                  
   `
