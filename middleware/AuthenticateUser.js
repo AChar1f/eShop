@@ -26,7 +26,7 @@ function verifyToken(req, res, next) {
         }
     } else {
         res?.json({
-            status: res.stausCode,
+            status: res.statusCode,
             msg: "Please login"
         })
     }
