@@ -33,5 +33,6 @@ function verifyToken(req, res, next) {
 }
 
 export {
-    createToken
+    createToken,
+    verifyToken
 }
