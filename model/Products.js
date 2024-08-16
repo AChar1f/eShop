@@ -4,7 +4,7 @@ class Products {
     fetchProducts(req, res) {
         try {
             const strQry = `
-            select prodName, category, prodDescription, prodURL, amount 
+            select productID, prodName, category, prodDescription, prodURL, amount 
             from Products;
             `
             db.query(strQry, (err, results) => {
@@ -25,7 +25,7 @@ class Products {
     fetchProduct(req, res) {
         try {
             const strQry = `
-            select prodName, category, prodDescription, amount 
+            select productID, prodName, category, prodDescription, amount 
             from Products
             where productID = ${req.params.productID}; 
             `
@@ -44,11 +44,34 @@ class Products {
         }
     }
 
+    recentProducts(req , res) {
+        try {
+            const strQry = `
+            select productID, prodName, category, prodDescription, prodURL, amount 
+            from Products
+            order by productID desc
+            limit 5;
+            `
+           db.query(strQry, (err, results) => {
+            if(err) throw new Error('Unable to fetch recent product data.')
+            res.json({
+                status: res.statusCode,
+                results
+            })
+           }) 
+        } catch (e) {
+            res.json({
+                status: 404,
+                msg: e.message
+            })
+        }
+    }
+
     async addProduct(req, res) {
         try {
             let data = req.body
             const strQry = `
-            insert into Products(prodName, category, prodDescription, prodURL, amount)
+            insert into Products
             set ?;
             `
             db.query(strQry, [data], (err) => {
