@@ -1,25 +1,23 @@
-import express from "express";
 import path from "path";
-import { connection as db } from "./config/index.js" // comes from config index variables    
-import { hash, compare } from 'bcrypt'
-import { createToken } from "./middleware/AuthenticateUser.js";
-import bodyParser from "body-parser";
+import { userRouter, express } from "./controller/UserController.js";
+import { productRouter } from "./controller/productContoller.js";    
+
 
 // Create an Express App
 const app = express()
 const port = +process.env.PORT || 4000
-const router = express.Router()
 
 // Middleware
-app.use(router, 
+app.use('/users', userRouter)
+app.use('/products', productRouter)
+app.use(  
   express.static("./static"),
   express.json(),
   express.urlencoded({
     extended: true
 }))
-router.use(bodyParser.json())
 // Endpoint
-router.get("^/$|/eShop", (req, res) => {
+app.get("^/$|/eShop", (req, res) => {
   res.status(200).sendFile(path.resolve("./static/html/index.html"))
 })
 // router.get("/users", (req, res) => {
@@ -187,12 +185,12 @@ router.get("^/$|/eShop", (req, res) => {
 //   })
 // }
 // })
-// router.get('*', (req, res) => {       // any endpoint that we did not create will return this.
-//   res.json({
-//     status: 404,
-//     msg: 'Resource not found'
-//   })
-// })
+app.get('*', (req, res) => {       // any endpoint that we did not create will return this.
+  res.json({
+    status: 404,
+    msg: 'Resource not found'
+  })
+})
 app.listen(port, () => {
   console.log(`Ayo, We live on Port ${port}`)
 })

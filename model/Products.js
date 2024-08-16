@@ -1,4 +1,4 @@
-import { connection as db } from '../config/index.js'
+import { connection as db } from '../config/index.js'  // comes from config index variables
 
 class Products {
     fetchProducts(req, res) {
