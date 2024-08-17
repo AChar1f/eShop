@@ -17,5 +17,15 @@ export default {
 }
 </script>
 <style scoped>
-    
+ .card {
+  width: 18rem;
+  padding-block: 9px;
+  background-image: linear-gradient(180deg, black 65%,#232323);
+  color: white;
+  border: 2px solid silver;
+}
+.card-header {
+  border: 2px solid silver;
+  background-color: white;
+}   
 </style>
