@@ -6,23 +6,23 @@ import { verifyToken } from '../middleware/AuthenticateUser.js'
 const productRouter = express.Router()
 productRouter.use(bodyParser.json())
 
-productRouter.get('/', verifyToken, (req, res) => {
+productRouter.get('/', (req, res) => {
     products.fetchProducts(req, res)
-})
-
-productRouter.get('/:id', verifyToken, (req, res) => {
-    products.fetchProduct(req, res)
 })
 
 productRouter.get('/recent', (req, res) => {
     products.recentProducts(req, res)
 })
 
-productRouter.post('/add', verifyToken, (req, res) => {
+productRouter.get('/:id', (req, res) => {
+    products.fetchProduct(req, res)
+})
+
+productRouter.post('/add', (req, res) => {
     products.addProduct(req, res)
 })
 
-productRouter.patch('/:id', verifyToken, (req, res) => {
+productRouter.patch('/:id', (req, res) => {
     products.updateProduct(req, res)
 })
 

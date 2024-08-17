@@ -1,6 +1,6 @@
 import path from "path";
 import { userRouter, express } from "./controller/UserController.js";
-import { productRouter } from "./controller/productContoller.js";    
+import { productRouter } from "./controller/ProductController.js";    
 
 
 // Create an Express App
@@ -8,6 +8,11 @@ const app = express()
 const port = +process.env.PORT || 4000
 
 // Middleware
+app.use((req, res, next) => {
+  // at the "*" its safer to use the link of the vue-project
+  res.header("Access-Control-Allow-Origin", "*")
+  next()
+})
 app.use('/users', userRouter)
 app.use('/products', productRouter)
 app.use(  
