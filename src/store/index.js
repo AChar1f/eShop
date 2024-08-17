@@ -6,7 +6,8 @@ import 'vue3-toastify/dist/index.css'
 // import { useCookies } from 'vue3-cookies'
 
 // const { cookies } = useCookies()
-const apiURL = 'http://localhost:3001/'
+// const apiURL = 'http://localhost:3001/'
+const apiURL = 'https://eshop-v25x.onrender.com'
 
 export default createStore({
   state: {
