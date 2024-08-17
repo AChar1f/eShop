@@ -59,12 +59,14 @@ export default createStore({
           context.commit('setProducts', results)
         } else {
           toast.error(`${msg}`), {
-            autoClose: 2500
+            autoClose: 2500,
+            position: toast.POSITION.BOTTOM_CENTER
           }
         }
       } catch (e) {
         toast.error(`${e.message}`, {
-          autoClose: 2500
+          autoClose: 2500,
+          position: toast.POSITION.BOTTOM_CENTER
         })
       }
     }
